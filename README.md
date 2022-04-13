@@ -8,3 +8,5 @@
     b) Deep Learning Specialisation Deep Learning AI on Coursera
 
 2. LSTMS - RNNS are from Udacity: Intro to Deep Learning with PyTorch
+
+3. Time Series Prediction are from: https://github.com/oliverguhr/transformer-time-series-prediction
