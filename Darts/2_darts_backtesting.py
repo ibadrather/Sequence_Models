@@ -25,7 +25,7 @@ series = TimeSeries.from_dataframe(df, 'Month', '#Passengers')
 # With Darts, it’s easy to compute the forecasts resulting from such a process, using backtesting. 
 # For instance, using backtesting to compare two models looks as follows:
 
-models = [ExponentialSmoothing(), Prophet(), AutoARIMA()]
+models = [ExponentialSmoothing(), AutoARIMA()] # , Prophet()
 backtests = [model.historical_forecasts(series,
                             start=.5,
                             forecast_horizon=3)
