@@ -1,16 +1,12 @@
 # Source: https://github.com/unit8co/darts/blob/master/examples/01-multi-time-series-and-covariates.ipynb
 
-import os
 from utils import *
-
 fix_pythonpath_if_working_locally()
 
-import pandas as pd
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
 
-from darts import TimeSeries
 from darts.utils.timeseries_generation import (
     gaussian_timeseries,
     linear_timeseries,
@@ -24,9 +20,8 @@ from darts.models import (
     BlockRNNModel,
 )
 
-from darts.metrics import mape, smape
+from darts.metrics import mape
 from darts.dataprocessing.transformers import Scaler
-from darts.utils.timeseries_generation import datetime_attribute_timeseries
 from darts.datasets import AirPassengersDataset, MonthlyMilkDataset
 
 # for reproducibility
@@ -61,8 +56,9 @@ train_milk, val_milk = series_milk_scaled[:-36], series_milk_scaled[-36:]
 # (output_chunk_length=12). We chose these values so it'll make our model produce 
 # successive predictions for one year at a time, looking at the past two years.
 
+n_epochs = 1    # change this
 model_air = NBEATSModel(
-    input_chunk_length=24, output_chunk_length=12, n_epochs=200, random_state=0
+    input_chunk_length=24, output_chunk_length=12, n_epochs=n_epochs, random_state=0
 )
 
 # Train the model
@@ -100,7 +96,16 @@ model_air_milk.fit([train_air, train_milk], verbose=True)
 
 
 plt.close("all")
+clear_terminal()
 
 # Producing Forecasts After the End of a Series
+
+pred = model_air_milk.predict(n=36, series=train_air)
+
+series_air_scaled.plot(label="actual")
+pred.plot(label="forecast")
+plt.legend()
+print("MAPE = {:.2f}%".format(mape(series_air_scaled, pred)))
+
 
 plt.show()
