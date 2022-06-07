@@ -1,5 +1,6 @@
 # Source: https://github.com/unit8co/darts/blob/master/examples/10-Kalman-filter-examples.ipynb
 
+from turtle import clear
 from utils import *
 fix_pythonpath_if_working_locally()
 
@@ -9,6 +10,8 @@ import matplotlib.pyplot as plt
 from darts import TimeSeries
 from darts.models import KalmanFilter
 from darts.utils import timeseries_generation as tg
+
+clear_terminal()
 
 NOISE_DISTANCE = 0.1
 SAMPLE_SIZE = 200
@@ -30,8 +33,31 @@ y.plot(color="gray", label="Output")
 y_noise.plot(color="red", label="Noisy observations")
 plt.legend()
 
-# 
+# Traning
+kf = KalmanFilter(dim_x=1)
+kf.fit(y_noise, u)
+
+# Filtering
+y_filtered = kf.filter(y_noise, u)
+
+plt.figure(figsize=[12, 8])
+u.plot(label="Input")
+y.plot(color="gray", label="Output")
+y_noise.plot(color="red", label="Noisy observations")
+y_filtered.plot(color="blue", label="Filtered observations")
+plt.legend()
+
+
+
+# Probababilistic Estimate
+y_filtered = kf.filter(y_noise, u, num_samples=1000)
+
+plt.figure(figsize=[12, 8])
+u.plot(label="Input")
+y.plot(color="gray", label="Output")
+y_noise.plot(color="red", label="Noisy observations")
+y_filtered.plot(color="blue", label="Filtered observations")
+plt.legend()
 
 plt.show()
-
 
